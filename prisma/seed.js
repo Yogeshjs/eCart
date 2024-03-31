@@ -1,12 +1,18 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
+import bcrypt from "bcrypt";
 
 async function main() {
+  const salt = await bcrypt.genSalt(saltRounds);
+
+  const adminPassHash = await bcrypt.hash("admin@123", salt);
+  const userPassHash = await bcrypt.hash("user@123", salt);
+
   const admin = await prisma.user.create({
     data: {
       name: "admin",
       email: "admin@gmail.com",
-      password: "admin123",
+      password: adminPassHash,
     },
   });
 
@@ -14,7 +20,7 @@ async function main() {
     data: {
       name: "user",
       email: "user@gmail.com",
-      password: "user@123",
+      password: userPassHash,
     },
   });
 
