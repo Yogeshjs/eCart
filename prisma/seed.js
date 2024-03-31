@@ -3,6 +3,7 @@ const prisma = new PrismaClient();
 import bcrypt from "bcrypt";
 
 async function main() {
+  const saltRounds = +process.env.SALT_ROUNDS;
   const salt = await bcrypt.genSalt(saltRounds);
 
   const adminPassHash = await bcrypt.hash("admin@123", salt);
