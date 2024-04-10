@@ -2,6 +2,7 @@ import express from "express";
 import compression from "compression";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
+import cors from "cors";
 
 import { auth as authRouter } from "./auth/auth.route.js";
 import { products as productRouter } from "./product/product.route.js";
@@ -18,6 +19,7 @@ app.use(express.json());
 app.use(compression());
 app.use(helmet());
 app.use(limiter);
+app.use(cors());
 
 app.use("/auth", authRouter);
 app.use("/products", productRouter);
