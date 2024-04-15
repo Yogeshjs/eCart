@@ -6,6 +6,7 @@ import cors from "cors";
 
 import { auth as authRouter } from "./auth/auth.route.js";
 import { products as productRouter } from "./product/product.route.js";
+import { tenantAuth as tenantAuthRouter } from "./tenant/tenant.auth.route.js";
 
 const port = process.env.PORT || 3000;
 
@@ -23,6 +24,7 @@ app.use(cors());
 
 app.use("/auth", authRouter);
 app.use("/products", productRouter);
+app.use("/tenant/auth", tenantAuthRouter);
 
 // health check api to test the service responding to the requrest
 app.get("/healthCheck", (req, res) => {

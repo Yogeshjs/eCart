@@ -9,11 +9,26 @@ async function main() {
   const adminPassHash = await bcrypt.hash("admin@123", salt);
   const userPassHash = await bcrypt.hash("user@123", salt);
 
+  const tenant1 = await prisma.tenant.create({
+    data: {
+      name: "tenant1",
+      plan: "BASIC",
+    },
+  });
+
+  const tenant2 = await prisma.tenant.create({
+    data: {
+      name: "tenant2",
+      plan: "ADVANCE",
+    },
+  });
+
   const admin = await prisma.user.create({
     data: {
       name: "admin",
       email: "admin@gmail.com",
       password: adminPassHash,
+      tenantId: tenant1.id,
     },
   });
 
@@ -22,6 +37,7 @@ async function main() {
       name: "user",
       email: "user@gmail.com",
       password: userPassHash,
+      tenantId: tenant2.id,
     },
   });
 

@@ -5,11 +5,11 @@ import { generateAccessToken } from "../common/util.js";
 import { isUserExist } from "../common/auth.middleware.js";
 import prisma from "../common/prismaClient.js";
 
-const auth = express.Router();
+const tenantAuth = express.Router();
 
 const saltRounds = +process.env.SALT_ROUNDS;
 
-auth.put("/signup", [isUserExist], async (req, res) => {
+tenantAuth.put("/signup", [isUserExist], async (req, res) => {
   const { email, name, password, tenantId } = req.body;
 
   try {
@@ -17,7 +17,7 @@ auth.put("/signup", [isUserExist], async (req, res) => {
 
     const hash = await bcrypt.hash(password, salt);
 
-    // const checkUserExists = await prisma.customer.count({
+    // const checkUserExists = await prisma.user.count({
     //   where: {
     //     email,
     //   },
@@ -30,7 +30,7 @@ auth.put("/signup", [isUserExist], async (req, res) => {
 
     console.log(email, password);
 
-    const data = await prisma.customer.create({
+    const data = await prisma.user.create({
       data: {
         name,
         email,
@@ -47,17 +47,15 @@ auth.put("/signup", [isUserExist], async (req, res) => {
   }
 });
 
-auth.post("/login", async (req, res) => {
+tenantAuth.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const user = await prisma.customer.findUnique({
+    const user = await prisma.user.findUnique({
       where: {
         email,
       },
     });
-
-    // user check
 
     if (!user?.id) {
       res.status(401).json({
@@ -71,8 +69,6 @@ auth.post("/login", async (req, res) => {
     const storedPassword = user.password;
 
     const isAuthorised = await bcrypt.compare(password, storedPassword);
-
-    // user password check
 
     if (!isAuthorised) {
       res.status(401).json({
@@ -96,4 +92,15 @@ auth.post("/login", async (req, res) => {
   }
 });
 
-export { auth };
+tenantAuth.get("/list", async (req, res) => {
+  try {
+    const tenants = await prisma.tenant.findMany();
+    res.json({ tenants });
+  } catch (error) {
+    console.log(error);
+
+    res.json({ reason: error.cause, message: error.message });
+  }
+});
+
+export { tenantAuth };
