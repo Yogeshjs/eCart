@@ -44,6 +44,13 @@ async function main() {
   console.log({ admin, user });
 }
 
+// {
+//   "name": "user1",
+//   "email": "user1@gmail.com",
+//   "password": "@123",
+//   "tenantId": "clv0vhcs20000n37r8zx1mo2w"
+// }
+
 main()
   .then(async () => {
     await prisma.$disconnect();

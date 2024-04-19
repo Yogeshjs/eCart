@@ -2,8 +2,6 @@ import { verifyAccessToken } from "./util.js";
 
 import prisma from "../common/prismaClient.js";
 
-globalThis;
-
 export const authenticateToken = (req, res, next) => {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
