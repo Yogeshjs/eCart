@@ -42,17 +42,17 @@ async function main() {
     },
   });
 
-  console.log({ admin, user });
-}
+  const user1 = await prisma.customer.create({
+    data: {
+      name: "user1",
+      email: "user1@gmail.com",
+      password: user1PassHash,
+      tenantId: tenant1.id,
+    },
+  });
 
-const user1 = await prisma.customer.create({
-  data: {
-    name: "user1",
-    email: "user1@gmail.com",
-    password: user1PassHash,
-    tenantId: tenant1.id,
-  },
-});
+  console.log({ admin, user, user1 });
+}
 
 // {
 //   "name": "user1",
